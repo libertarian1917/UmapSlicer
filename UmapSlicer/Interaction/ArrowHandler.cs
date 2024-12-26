@@ -1,22 +1,10 @@
 ﻿using HelixToolkit.Wpf;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Media.Media3D;
 using System.Windows.Media;
-
-using System.ComponentModel.DataAnnotations;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using System.Security.Cryptography.Xml;
-using System.Security.Policy;
-using System.Diagnostics;
-using Microsoft.VisualBasic;
+using UmapSlicer.Enums;
 
-namespace UmapSlicer
+namespace UmapSlicer.Interaction
 {
     /// <summary>
     /// All the interaction with an object in Umap is implemented here 
@@ -114,7 +102,7 @@ namespace UmapSlicer
         }
 
         /// <summary>
-        /// Moving <see cref="ArrowHandler.selectedModel">selectedModel</see> with mouse coordinates
+        /// Moving <see cref="selectedModel">selectedModel</see> with mouse coordinates
         /// </summary>
         /// <param name="currentMousePosition"></param>
         /// <param name="lastMousePosition"></param>
@@ -134,15 +122,15 @@ namespace UmapSlicer
 
             if (draggedArrow == Axis.X)
             {
-                transform.OffsetX = offsetX + (delta.X * getSign(lookDirection.Y * upDirection.Z) * scaleFactor);
+                transform.OffsetX = offsetX + delta.X * getSign(lookDirection.Y * upDirection.Z) * scaleFactor;
             }
             else if (draggedArrow == Axis.Y)
             {
-                transform.OffsetY = offsetY + (delta.X * getSign(-lookDirection.X * upDirection.Z) * scaleFactor);
+                transform.OffsetY = offsetY + delta.X * getSign(-lookDirection.X * upDirection.Z) * scaleFactor;
             }
             else if (draggedArrow == Axis.Z)
             {
-                transform.OffsetZ = offsetZ + (delta.Y * -getSign(upDirection.Z) * scaleFactor);
+                transform.OffsetZ = offsetZ + delta.Y * -getSign(upDirection.Z) * scaleFactor;
             }
             selectedModel.Transform = transform;
             UpdateArrowPositions();
@@ -161,7 +149,7 @@ namespace UmapSlicer
         }
 
         /// <summary>
-        /// Moving arrows following <see cref="ArrowHandler.selectedModel">selectedModel</see>
+        /// Moving arrows following <see cref="selectedModel">selectedModel</see>
         /// </summary>
         private void UpdateArrowPositions()
         {

@@ -6,6 +6,8 @@ using System.Windows.Media.Media3D;
 using HelixToolkit.Wpf;
 using System.IO;
 using System.Diagnostics;
+using UmapSlicer.Enums;
+using UmapSlicer.Interaction;
 
 
 namespace UmapSlicer
@@ -21,7 +23,7 @@ namespace UmapSlicer
         private bool secondCheck = false;
 
         // Scene
-        private  Dictionary<Materials, DiffuseMaterial> ColorDict = new Dictionary<Materials, DiffuseMaterial>();
+        private  Dictionary<Enums.Materials, DiffuseMaterial> ColorDict = new Dictionary<Enums.Materials, DiffuseMaterial>();
         private Model3DGroup models;
         private List<ModelVisual3D> sceneDetails;
 
@@ -54,8 +56,8 @@ namespace UmapSlicer
 
             foreach (GeometryModel3D geometryModel in models.Children)
             {
-                geometryModel.Material = ColorDict[Materials.GrayDefault];
-                geometryModel.BackMaterial = ColorDict[Materials.GrayDefault];
+                geometryModel.Material = ColorDict[Enums.Materials.GrayDefault];
+                geometryModel.BackMaterial = ColorDict[Enums.Materials.GrayDefault];
             }
             // Add models to MainViewport3D
             MainViewport.Children.Add(new ModelVisual3D { Content = models });
@@ -177,11 +179,11 @@ namespace UmapSlicer
             DiffuseMaterial greenMaterial = new DiffuseMaterial(new SolidColorBrush(Color.FromArgb(255, (byte)115, (byte)210, (byte)50)));
             DiffuseMaterial whiteMaterial = new DiffuseMaterial(new SolidColorBrush(Color.FromArgb(255, (byte)230, (byte)230, (byte)230)));
 
-            ColorDict.Add(Materials.RedOutOfBorders, redMaterial);
-            ColorDict.Add(Materials.GrayDefault, grayDefaultMaterial);
-            ColorDict.Add(Materials.BlueGreenHover, blueGreenMaterial);
-            ColorDict.Add(Materials.GreenSelected, greenMaterial);
-            ColorDict.Add(Materials.White, whiteMaterial);
+            ColorDict.Add(Enums.Materials.RedOutOfBorders, redMaterial);
+            ColorDict.Add(Enums.Materials.GrayDefault, grayDefaultMaterial);
+            ColorDict.Add(Enums.Materials.BlueGreenHover, blueGreenMaterial);
+            ColorDict.Add(Enums.Materials.GreenSelected, greenMaterial);
+            ColorDict.Add(Enums.Materials.White, whiteMaterial);
         }
 
     }

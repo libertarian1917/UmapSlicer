@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using UmapSlicer.Interaction;
 
-namespace UmapSlicer
+namespace UmapSlicer.Enums
 {
     /// <summary>
     /// Colors for <see cref="MainWindow.ColorDict">ColorDict</see> collection for easy access. Implemented in <see cref="MainWindow.InitializeColors">InitializeColors</see>
