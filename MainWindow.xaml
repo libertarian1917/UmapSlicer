@@ -1,0 +1,79 @@
+﻿<Window x:Class="UmapSlicer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:hx="http://helix-toolkit.org/wpf"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:UmapSlicer"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="7*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="18px"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Menu x:Name="MenuBar" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Background="White">
+            <MenuItem Header="_File">
+                <MenuItem Header="_Open" Click="MenuOpen_Click"/>
+                <MenuItem Header="_Close"/>
+                <MenuItem Header="_Exit"/>
+            </MenuItem>
+        </Menu>
+
+        <hx:HelixViewport3D x:Name="MainViewport" Grid.Column="0" Grid.Row="1" ShowCoordinateSystem="True" ShowFrameRate="False" ShowViewCube="False"
+                            CameraChanged="Viewport_CameraChanged" MouseDown="Viewport_MouseDown" MouseMove="Viewport_MouseMove" MouseUp="Viewport_MouseUp">
+            <!-- Camera settings -->
+            <hx:HelixViewport3D.Camera>
+                <PerspectiveCamera x:Name="mainCameraView" Position="0, 0, 10" LookDirection="0, 0, -10" UpDirection="0, 1, 0" FieldOfView="45"/>
+            </hx:HelixViewport3D.Camera>
+
+            <hx:GridLinesVisual3D x:Name="gridLines" Length="20" Width="20" MajorDistance="1" MinorDistance="0.5" Thickness="0.01"
+                                 Center="0,0,0" Normal="0,0,1" Fill="White"/>
+            <hx:LinesVisual3D x:Name="frontLine"  Color="Gray" Thickness="2">
+                <hx:LinesVisual3D.Points>
+                    <Point3D X="10" Y="-10" Z="0"/>
+                    <Point3D X="10" Y="10" Z="0"/>
+                </hx:LinesVisual3D.Points>
+            </hx:LinesVisual3D>
+            <hx:LinesVisual3D x:Name="leftLine"  Color="Gray" Thickness="2">
+                <hx:LinesVisual3D.Points>
+                    <Point3D X="10" Y="-10" Z="0"/>
+                    <Point3D X="-10" Y="-10" Z="0"/>
+                </hx:LinesVisual3D.Points>
+            </hx:LinesVisual3D>
+            <hx:LinesVisual3D x:Name="backLine"  Color="Gray" Thickness="2">
+                <hx:LinesVisual3D.Points>
+                    <Point3D X="-10" Y="-10" Z="0"/>
+                    <Point3D X="-10" Y="10" Z="0"/>
+                </hx:LinesVisual3D.Points>
+            </hx:LinesVisual3D>
+            <hx:LinesVisual3D x:Name="rightLine"  Color="Gray" Thickness="2">
+                <hx:LinesVisual3D.Points>
+                    <Point3D X="-10" Y="10" Z="0"/>
+                    <Point3D X="10" Y="10" Z="0"/>
+                </hx:LinesVisual3D.Points>
+            </hx:LinesVisual3D>
+
+            <hx:DefaultLights x:Name="defaultLights" ShowLights="False"/>
+        </hx:HelixViewport3D>
+
+        <hx:HelixViewport3D x:Name="OverlayViewport" Grid.Column="0" Grid.Row="1" ShowCoordinateSystem="False" ShowFrameRate="False" Background="Transparent"
+                            ShowViewCube="False" IsHitTestVisible="False" MouseDown="Viewport_MouseDown" MouseMove="Viewport_MouseMove" MouseUp="Viewport_MouseUp">
+
+            <hx:HelixViewport3D.Camera>
+                <PerspectiveCamera x:Name="overlayCameraView" Position="0, 0, 10" LookDirection="0, 0, -10" UpDirection="0, 1, 0" FieldOfView="45"/>
+            </hx:HelixViewport3D.Camera>
+            
+            <hx:DefaultLights/>
+        </hx:HelixViewport3D>
+
+        <DockPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Stretch" LastChildFill="True">
+            
+        </DockPanel>
+    </Grid>
+</Window>
