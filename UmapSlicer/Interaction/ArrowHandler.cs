@@ -3,6 +3,8 @@ using System.Windows.Media.Media3D;
 using System.Windows.Media;
 using System.Windows;
 using UmapSlicer.Enums;
+using UmapSlicer.Interaction;
+using System.Diagnostics;
 
 namespace UmapSlicer.Interaction
 {
@@ -40,31 +42,32 @@ namespace UmapSlicer.Interaction
             var bounds = selectedModel.Content.Bounds;
             var transform = selectedModel.Transform as TranslateTransform3D ?? new TranslateTransform3D();
 
-            Point3D center = new Point3D(
-                bounds.X + bounds.SizeX / 2,
-                bounds.Y + bounds.SizeY / 2,
-                bounds.Z + bounds.SizeZ / 2);
+            var (min, max) = ModelUtilities.GetMinAndMaxPoints(selectedModel.Content);
+            Debug.WriteLine("Min X: " + min.X + "\nMin Y: " + min.Y + "\nMin Z: " + min.Z + "\n\n\n" + "Max X: " + max.X + "\nMax Y: " + max.Y + "\nMax Z: " + max.Z);
+
+            Point3D center = new Point3D(0, 0, 0);
+            double size = (bounds.SizeX + bounds.SizeY + bounds.SizeZ) / 3;
 
             // Создание стрелок
-            xArrow = CreateArrow(Colors.Red, center, new Vector3D(1, 0, 0), bounds.SizeX * 0.7);
-            yArrow = CreateArrow(Colors.Green, center, new Vector3D(0, 1, 0), bounds.SizeY * 0.7);
-            zArrow = CreateArrow(Colors.Blue, center, new Vector3D(0, 0, 1), bounds.SizeZ * 0.7);
+            xArrow = CreateArrow(Colors.Red, center, new Vector3D(1, 0, 0), size * 0.5);
+            yArrow = CreateArrow(Colors.Green, center, new Vector3D(0, 1, 0), size * 0.5);
+            zArrow = CreateArrow(Colors.Blue, center, new Vector3D(0, 0, 1), size * 0.5);
 
             // Создание конусов
             xArrowCone = CreateCone(
-                new Point3D(center.X + bounds.SizeX * 0.7, center.Y, center.Z),
-                new Point3D(center.X + bounds.SizeX * 0.7 + 0.6, center.Y, center.Z),
-                radius: 0.15, segments: 27, color: Colors.Red);
+                new Point3D(center.X + size * 0.5, center.Y, center.Z),
+                new Point3D(center.X + size * 0.5 + size * 0.1, center.Y, center.Z),
+                radius: size * 0.035, segments: 27, color: Colors.Red);
 
             yArrowCone = CreateCone(
-                new Point3D(center.X, center.Y + bounds.SizeY * 0.7, center.Z),
-                new Point3D(center.X, center.Y + bounds.SizeY * 0.7 + 0.6, center.Z),
-                radius: 0.15, segments: 27, color: Colors.Green);
+                new Point3D(center.X, center.Y + size * 0.5, center.Z),
+                new Point3D(center.X, center.Y + size * 0.5 + size * 0.1, center.Z),
+                radius: size * 0.035, segments: 27, color: Colors.Green);
 
             zArrowCone = CreateCone(
-                new Point3D(center.X, center.Y, center.Z + bounds.SizeZ * 0.7),
-                new Point3D(center.X, center.Y, center.Z + bounds.SizeZ * 0.7 + 0.6),
-                radius: 0.15, segments: 27, color: Colors.Blue);
+                new Point3D(center.X, center.Y, center.Z + size * 0.5),
+                new Point3D(center.X, center.Y, center.Z + size * 0.5 + size * 0.1),
+                radius: size * 0.035, segments: 27, color: Colors.Blue);
         }
 
         private ModelVisual3D CreateCone(Point3D baseCenter, Point3D topPoint, double radius, int segments, Color color)

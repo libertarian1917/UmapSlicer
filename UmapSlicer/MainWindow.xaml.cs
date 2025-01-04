@@ -8,6 +8,7 @@ using System.IO;
 using System.Diagnostics;
 using UmapSlicer.Enums;
 using UmapSlicer.Interaction;
+using System.Transactions;
 
 
 namespace UmapSlicer
@@ -42,13 +43,21 @@ namespace UmapSlicer
             InitializeScene();
         }
 
-        private void RenderFileSTL(string filePath)
+        private void ChangeMaterial(ModelVisual3D model, Enums.Materials material)
+        {
+            if (model.Content is GeometryModel3D geometry)
+            {
+                geometry.Material = ColorDict[material];
+            }
+        }
+
+        private ModelVisual3D RenderFileSTL(string filePath, Enums.Materials material = Enums.Materials.ModelDefault)
         {
             // Check if file exists
             if (!File.Exists(filePath))
             {
                 MessageBox.Show("Нету STL? А если найду?");
-                return;
+                return null;
             }
             // Creating StLReader for loading of STL file
             var stlReader = new StLReader();
@@ -56,14 +65,15 @@ namespace UmapSlicer
 
             foreach (GeometryModel3D geometryModel in models.Children)
             {
-                geometryModel.Material = ColorDict[Enums.Materials.GrayDefault];
-                geometryModel.BackMaterial = ColorDict[Enums.Materials.GrayDefault];
+                geometryModel.Material = ColorDict[material];
+                geometryModel.BackMaterial = ColorDict[material];
             }
             // Add models to MainViewport3D
-            MainViewport.Children.Add(new ModelVisual3D { Content = models });
-
+            var model = new ModelVisual3D { Content = models };
+            MainViewport.Children.Add(model);
+            // Potential access to the added model
+            return model;
         }
-
 
         private ModelVisual3D GetModelUnderMouse(MouseEventArgs e, HelixViewport3D viewport)
         {
@@ -146,7 +156,7 @@ namespace UmapSlicer
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
 
-            openFileDialog.InitialDirectory = "c:\\";
+            openFileDialog.InitialDirectory = "C:\\";
             openFileDialog.Filter = "Database files (*.stl)|*.stl";
             openFileDialog.FilterIndex = 0;
             openFileDialog.RestoreDirectory = true;
@@ -159,12 +169,34 @@ namespace UmapSlicer
             RenderFileSTL(selectedFileName);
         }
 
+        private void MenuCleanScene_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void MenuExit_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+
+        private void CleanScene()
+        {
+            
+        }
+
         /// <summary>
         /// Define all default object for scene and added to <see cref="sceneDetails">sceneDetails</see>
         /// </summary>
         private void InitializeScene()
         {
-            sceneDetails = new List<ModelVisual3D>() { gridLines, frontLine, leftLine, backLine, rightLine };
+            var meshBuilder = new MeshBuilder();
+            meshBuilder.AddBox(new Point3D(0, 0, -0.0501), 25, 21, 0.1);
+            var geometry = meshBuilder.ToMesh();
+            var model = new GeometryModel3D(geometry, ColorDict[Enums.Materials.PlateDefault]);
+            model.BackMaterial = ColorDict[Enums.Materials.PlateDefault];
+            ModelVisual3D plate = new ModelVisual3D { Content = model };
+            MainViewport.Children.Add(plate);
+
+            sceneDetails = new List<ModelVisual3D>() { gridLines, frontLine, leftLine, backLine, rightLine, plate };
             arrowHandler = new ArrowHandler(OverlayViewport);
 
             var brush = Brushes.DimGray;
@@ -177,13 +209,13 @@ namespace UmapSlicer
             DiffuseMaterial grayDefaultMaterial = new DiffuseMaterial(new SolidColorBrush(Color.FromArgb(255, (byte)222, (byte)222, (byte)222)));
             DiffuseMaterial blueGreenMaterial = new DiffuseMaterial(new SolidColorBrush(Color.FromArgb(255, (byte)40, (byte)170, (byte)140)));
             DiffuseMaterial greenMaterial = new DiffuseMaterial(new SolidColorBrush(Color.FromArgb(255, (byte)115, (byte)210, (byte)50)));
-            DiffuseMaterial whiteMaterial = new DiffuseMaterial(new SolidColorBrush(Color.FromArgb(255, (byte)230, (byte)230, (byte)230)));
+            DiffuseMaterial darkGrayMaterial = new DiffuseMaterial(new SolidColorBrush(Color.FromArgb(255, (byte)45, (byte)45, (byte)45)));
 
-            ColorDict.Add(Enums.Materials.RedOutOfBorders, redMaterial);
-            ColorDict.Add(Enums.Materials.GrayDefault, grayDefaultMaterial);
-            ColorDict.Add(Enums.Materials.BlueGreenHover, blueGreenMaterial);
-            ColorDict.Add(Enums.Materials.GreenSelected, greenMaterial);
-            ColorDict.Add(Enums.Materials.White, whiteMaterial);
+            ColorDict.Add(Enums.Materials.OutOfBorders, redMaterial);
+            ColorDict.Add(Enums.Materials.ModelDefault, grayDefaultMaterial);
+            ColorDict.Add(Enums.Materials.OnModelHover, blueGreenMaterial);
+            ColorDict.Add(Enums.Materials.ModelSelected, greenMaterial);
+            ColorDict.Add(Enums.Materials.PlateDefault, darkGrayMaterial);
         }
 
     }

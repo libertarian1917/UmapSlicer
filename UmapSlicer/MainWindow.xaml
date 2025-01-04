@@ -7,6 +7,7 @@
         xmlns:local="clr-namespace:UmapSlicer"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="7*"/>
@@ -20,42 +21,42 @@
         <Menu x:Name="MenuBar" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Background="White">
             <MenuItem Header="_File">
                 <MenuItem Header="_Open" Click="MenuOpen_Click"/>
-                <MenuItem Header="_Close"/>
-                <MenuItem Header="_Exit"/>
+                <MenuItem Header="_Clean scene" Click="MenuCleanScene_Click"/>
+                <MenuItem Header="_Exit" Click="MenuExit_Click"/>
             </MenuItem>
         </Menu>
 
-        <hx:HelixViewport3D x:Name="MainViewport" Grid.Column="0" Grid.Row="1" ShowCoordinateSystem="True" ShowFrameRate="False" ShowViewCube="False"
+        <hx:HelixViewport3D x:Name="MainViewport" Grid.Column="0" Grid.Row="1" ShowCoordinateSystem="False" ShowFrameRate="False" ShowViewCube="False"
                             CameraChanged="Viewport_CameraChanged" MouseDown="Viewport_MouseDown" MouseMove="Viewport_MouseMove" MouseUp="Viewport_MouseUp">
             <!-- Camera settings -->
             <hx:HelixViewport3D.Camera>
                 <PerspectiveCamera x:Name="mainCameraView" Position="0, 0, 10" LookDirection="0, 0, -10" UpDirection="0, 1, 0" FieldOfView="45"/>
             </hx:HelixViewport3D.Camera>
-
-            <hx:GridLinesVisual3D x:Name="gridLines" Length="20" Width="20" MajorDistance="1" MinorDistance="0.5" Thickness="0.01"
+            <!-- 1 = 1 cm -->
+            <hx:GridLinesVisual3D x:Name="gridLines" Length="25" Width="21" MajorDistance="5" MinorDistance="0.5" Thickness="0.015"
                                  Center="0,0,0" Normal="0,0,1" Fill="White"/>
-            <hx:LinesVisual3D x:Name="frontLine"  Color="Gray" Thickness="2">
+            <hx:LinesVisual3D x:Name="rightLine"  Color="Gray" Thickness="2">
                 <hx:LinesVisual3D.Points>
-                    <Point3D X="10" Y="-10" Z="0"/>
-                    <Point3D X="10" Y="10" Z="0"/>
-                </hx:LinesVisual3D.Points>
-            </hx:LinesVisual3D>
-            <hx:LinesVisual3D x:Name="leftLine"  Color="Gray" Thickness="2">
-                <hx:LinesVisual3D.Points>
-                    <Point3D X="10" Y="-10" Z="0"/>
-                    <Point3D X="-10" Y="-10" Z="0"/>
+                    <Point3D X="12.5" Y="-10.5" Z="0"/>
+                    <Point3D X="12.5" Y="10.5" Z="0"/>
                 </hx:LinesVisual3D.Points>
             </hx:LinesVisual3D>
             <hx:LinesVisual3D x:Name="backLine"  Color="Gray" Thickness="2">
                 <hx:LinesVisual3D.Points>
-                    <Point3D X="-10" Y="-10" Z="0"/>
-                    <Point3D X="-10" Y="10" Z="0"/>
+                    <Point3D X="12.5" Y="-10.5" Z="0"/>
+                    <Point3D X="-12.5" Y="-10.5" Z="0"/>
                 </hx:LinesVisual3D.Points>
             </hx:LinesVisual3D>
-            <hx:LinesVisual3D x:Name="rightLine"  Color="Gray" Thickness="2">
+            <hx:LinesVisual3D x:Name="leftLine"  Color="Gray" Thickness="2">
                 <hx:LinesVisual3D.Points>
-                    <Point3D X="-10" Y="10" Z="0"/>
-                    <Point3D X="10" Y="10" Z="0"/>
+                    <Point3D X="-12.5" Y="-10.5" Z="0"/>
+                    <Point3D X="-12.5" Y="10.5" Z="0"/>
+                </hx:LinesVisual3D.Points>
+            </hx:LinesVisual3D>
+            <hx:LinesVisual3D x:Name="frontLine"  Color="Gray" Thickness="2">
+                <hx:LinesVisual3D.Points>
+                    <Point3D X="-12.5" Y="10.5" Z="0"/>
+                    <Point3D X="12.5" Y="10.5" Z="0"/>
                 </hx:LinesVisual3D.Points>
             </hx:LinesVisual3D>
 
@@ -76,4 +77,5 @@
             
         </DockPanel>
     </Grid>
+
 </Window>

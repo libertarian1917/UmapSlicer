@@ -7,11 +7,12 @@ namespace UmapSlicer.Enums
     /// </summary>
     public enum Materials
     {
-        RedOutOfBorders,
-        GrayDefault,
-        BlueGreenHover,
-        GreenSelected,
-        White
+        OutOfBorders,
+        ModelDefault,
+        OnModelHover,
+        ModelSelected,
+        PlateDefault,
+        NoMaterial
     }
 
     /// <summary>
